@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:meals_app/widgets/custom_switch_list_tile.dart';
 
+enum Filter {
+  glutenFree,
+  lactoseFree,
+  vegetarian,
+  vegan,
+}
+
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({super.key});
 
@@ -58,33 +65,44 @@ class _FiltersScreenState extends State<FiltersScreen> {
       appBar: AppBar(
         title: const Text("Your Filters"),
       ),
-      body: Column(
-        children: [
-          CustomSwitchListTile(
-            title: "Gluten-free",
-            subtitle: "Only include gluten-free meals",
-            value: _glutenFreeFilterSet,
-            onChanged: _handleGlutenFreeChanged,
-          ),
-          CustomSwitchListTile(
-            title: "Lactose-free",
-            subtitle: "",
-            value: _lactoseFreeFilterSet,
-            onChanged: _handleLactoseFreeChanged,
-          ),
-          CustomSwitchListTile(
-            title: "Vegetarian",
-            subtitle: "",
-            value: _vegetarianFilterSet,
-            onChanged: _handleVegetarianChanged,
-          ),
-          CustomSwitchListTile(
-            title: "Vegan",
-            subtitle: "",
-            value: _veganFilterSet,
-            onChanged: _handleVeganChanged,
-          ),
-        ],
+      body: WillPopScope(
+        onWillPop: () async {
+          Navigator.of(context).pop({
+            Filter.glutenFree: _glutenFreeFilterSet,
+            Filter.lactoseFree: _lactoseFreeFilterSet,
+            Filter.vegan: _veganFilterSet,
+            Filter.vegetarian: _vegetarianFilterSet,
+          });
+          return false;
+        },
+        child: Column(
+          children: [
+            CustomSwitchListTile(
+              title: "Gluten-free",
+              subtitle: "Only include gluten-free meals",
+              value: _glutenFreeFilterSet,
+              onChanged: _handleGlutenFreeChanged,
+            ),
+            CustomSwitchListTile(
+              title: "Lactose-free",
+              subtitle: "Only include lactose-free meals",
+              value: _lactoseFreeFilterSet,
+              onChanged: _handleLactoseFreeChanged,
+            ),
+            CustomSwitchListTile(
+              title: "Vegetarian",
+              subtitle: "Only include vegetarian meals",
+              value: _vegetarianFilterSet,
+              onChanged: _handleVegetarianChanged,
+            ),
+            CustomSwitchListTile(
+              title: "Vegan",
+              subtitle: "Only include vegan meals",
+              value: _veganFilterSet,
+              onChanged: _handleVeganChanged,
+            ),
+          ],
+        ),
       ),
     );
   }
